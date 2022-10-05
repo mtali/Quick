@@ -9,8 +9,8 @@ object SignUpDestination : QuickDestination {
     override val route: String = "sign_up_route"
 }
 
-fun NavGraphBuilder.signUpGraph() {
+fun NavGraphBuilder.signUpGraph(onSignUpCompleted: () -> Unit) {
     composable(SignUpDestination.route) {
-        SignUpRoute()
+        SignUpRoute(onSignUpCompleted = onSignUpCompleted)
     }
 }

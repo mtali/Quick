@@ -46,7 +46,11 @@ fun QuickNavHost(
             restartApp = { appState.clearAndNavigate(SplashDestination.route) }
         )
 
-        signUpGraph()
+        signUpGraph(
+            onSignUpCompleted = {
+                appState.navigateAndPopUp(SettingsDestination.route, SignUpDestination.route)
+            }
+        )
 
         loginGraph()
     }

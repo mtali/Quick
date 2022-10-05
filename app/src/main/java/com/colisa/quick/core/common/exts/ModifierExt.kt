@@ -23,3 +23,8 @@ fun Modifier.spacer() = this
 fun Modifier.fieldModifier() = this
     .fillMaxWidth()
     .padding(16.dp, 4.dp)
+
+fun Modifier.basicButton() = this
+    .fillMaxWidth()
+    .padding(16.dp, 8.dp)
+
