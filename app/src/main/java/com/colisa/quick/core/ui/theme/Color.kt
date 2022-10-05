@@ -1,8 +1,7 @@
-package com.colisa.quick.ui.theme
+package com.colisa.quick.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val BrightOrange = Color(0xFFFF8A65)
+val MediumOrange = Color(0xFFFFA000)
+val DarkOrange = Color(0xFFF57C00)

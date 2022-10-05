@@ -1,4 +1,4 @@
-package com.colisa.quick.ui.theme
+package com.colisa.quick.core.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.colisa.quick.ui.theme.QuickTheme
+import com.colisa.quick.core.ui.theme.QuickTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

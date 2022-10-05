@@ -1,4 +1,4 @@
-package com.colisa.quick.ui.theme
+package com.colisa.quick.core.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
