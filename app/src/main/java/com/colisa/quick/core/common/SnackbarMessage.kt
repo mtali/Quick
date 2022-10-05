@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import com.colisa.quick.R.string as AppText
 
 sealed interface SnackbarMessage {
-    data class StringSnackbar(val message: String) : SnackbarMessage
-    data class ResourceSnackbar(@StringRes val message: Int) : SnackbarMessage
+    class StringSnackbar(val message: String) : SnackbarMessage
+    class ResourceSnackbar(@StringRes val message: Int) : SnackbarMessage
 
     companion object {
         fun SnackbarMessage.toMessage(resources: Resources): String {
