@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.colisa.quick'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.colisa.quick"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -48,12 +48,18 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    def core_version = "1.9.0"
+    def lifecycle_version = "2.5.1"
+    def activity_compose = '1.6.0'
+    def material_compose = '1.2.1'
+
+    implementation "androidx.core:core-ktx:$core_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.activity:activity-compose:$activity_compose"
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation 'androidx.compose.material:material:1.1.1'
+    implementation "androidx.compose.material:material:$material_compose"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
