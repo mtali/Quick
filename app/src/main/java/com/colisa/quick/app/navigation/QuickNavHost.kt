@@ -17,6 +17,10 @@ fun QuickNavHost(
         startDestination = SplashDestination.route,
         modifier = modifier
     ) {
-        splashGraph()
+        splashGraph(
+            openAndPopUp = { route, popUpRoute ->
+                appState.navigateAndPopUp(route, popUpRoute)
+            }
+        )
     }
 }
