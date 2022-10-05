@@ -84,7 +84,7 @@ private fun SettingsScreen(
 
             DangerousCardEditor(
                 modifier = Modifier.card(),
-                title = AppText.delete_account,
+                title = AppText.delete_account_title,
                 icon = AppIcon.ic_delete_my_account,
                 content = "",
                 onEditClick = onClickDeleteAccount

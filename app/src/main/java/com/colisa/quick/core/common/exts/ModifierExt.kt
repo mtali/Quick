@@ -16,6 +16,10 @@ fun Modifier.card(): Modifier {
     return this.padding(16.dp, 0.dp, 16.dp, 8.dp)
 }
 
-fun Modifier.spacer(): Modifier = this
+fun Modifier.spacer() = this
     .fillMaxWidth()
     .padding(12.dp)
+
+fun Modifier.fieldModifier() = this
+    .fillMaxWidth()
+    .padding(16.dp, 4.dp)

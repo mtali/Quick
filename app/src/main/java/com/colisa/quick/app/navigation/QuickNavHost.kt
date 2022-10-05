@@ -5,8 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.colisa.quick.app.ui.QuickAppState
+import com.colisa.quick.features.login.navigation.LoginDestination
+import com.colisa.quick.features.login.navigation.loginGraph
 import com.colisa.quick.features.settings.navigation.SettingsDestination
 import com.colisa.quick.features.settings.navigation.settingsGraph
+import com.colisa.quick.features.sign_up.navigation.SignUpDestination
+import com.colisa.quick.features.sign_up.navigation.signUpGraph
 import com.colisa.quick.features.spash.navigation.SplashDestination
 import com.colisa.quick.features.spash.navigation.splashGraph
 import com.colisa.quick.features.tasks.navigation.TasksDestination
@@ -37,9 +41,13 @@ fun QuickNavHost(
         )
 
         settingsGraph(
-            openLogin = {},
-            openSignUp = {},
+            openLogin = { appState.navigate(LoginDestination.route) },
+            openSignUp = { appState.navigate(SignUpDestination.route) },
             restartApp = { appState.clearAndNavigate(SplashDestination.route) }
         )
+
+        signUpGraph()
+
+        loginGraph()
     }
 }
