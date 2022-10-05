@@ -52,6 +52,10 @@ fun QuickNavHost(
             }
         )
 
-        loginGraph()
+        loginGraph(
+            onLoginCompleted = {
+                appState.navigateAndPopUp(SettingsDestination.route, LoginDestination.route)
+            }
+        )
     }
 }

@@ -9,17 +9,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.colisa.quick.R
+import com.colisa.quick.core.common.exts.basicButton
+import com.colisa.quick.core.common.exts.fieldModifier
 import com.colisa.quick.core.common.exts.spacer
+import com.colisa.quick.core.ui.components.BasicButton
+import com.colisa.quick.core.ui.components.EmailField
+import com.colisa.quick.core.ui.components.PasswordField
 import com.colisa.quick.core.ui.components.QuickAppBar
 
 @Composable
-fun LoginRoute(viewModel: LoginViewModel = hiltViewModel()) {
-    LoginScreen()
+fun LoginRoute(viewModel: LoginViewModel = hiltViewModel(), onSignInCompleted: () -> Unit) {
+    LoginScreen(
+        uiState = viewModel.uiState,
+        onEmailChanged = viewModel::onEmailChanged,
+        onPasswordChanged = viewModel::onPasswordChanged,
+        onClickSignIn = { viewModel.onClickSignIn(onSignInCompleted) }
+    )
 }
 
 
 @Composable
-private fun LoginScreen() {
+private fun LoginScreen(
+    uiState: LoginUiState,
+    onEmailChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
+    onClickSignIn: () -> Unit
+) {
     Scaffold(
         topBar = {
             QuickAppBar(title = R.string.sign_in)
@@ -34,6 +49,21 @@ private fun LoginScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.spacer())
+
+            val fieldModifier = Modifier.fieldModifier()
+
+            EmailField(value = uiState.email, onNewValue = onEmailChanged, modifier = fieldModifier)
+            PasswordField(
+                value = uiState.password,
+                onNewValue = onPasswordChanged,
+                modifier = fieldModifier
+            )
+
+            BasicButton(
+                text = R.string.sign_in,
+                modifier = Modifier.basicButton(),
+                action = onClickSignIn
+            )
         }
 
     }
