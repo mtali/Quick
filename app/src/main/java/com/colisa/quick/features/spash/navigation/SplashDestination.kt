@@ -9,8 +9,8 @@ object SplashDestination : QuickDestination {
     override val route: String = "splash_route"
 }
 
-fun NavGraphBuilder.splashGraph(openAndPopUp: (String, String) -> Unit) {
+fun NavGraphBuilder.splashGraph(onSplashFinished: () -> Unit) {
     composable(SplashDestination.route) {
-        SplashRoute(openAndPopUp = openAndPopUp)
+        SplashRoute(onSplashFinished = onSplashFinished)
     }
 }

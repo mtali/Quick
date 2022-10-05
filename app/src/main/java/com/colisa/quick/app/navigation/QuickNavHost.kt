@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import com.colisa.quick.app.ui.QuickAppState
 import com.colisa.quick.features.spash.navigation.SplashDestination
 import com.colisa.quick.features.spash.navigation.splashGraph
+import com.colisa.quick.features.tasks.navigation.TasksDestination
+import com.colisa.quick.features.tasks.navigation.tasksGraph
 
 @Composable
 fun QuickNavHost(
@@ -18,8 +20,17 @@ fun QuickNavHost(
         modifier = modifier
     ) {
         splashGraph(
-            openAndPopUp = { route, popUpRoute ->
-                appState.navigateAndPopUp(route, popUpRoute)
+            onSplashFinished = {
+                appState.navigateAndPopUp(TasksDestination.route, SplashDestination.route)
+            }
+        )
+
+        tasksGraph(
+            openSettings = {
+
+            },
+            openAddTask = {
+
             }
         )
     }

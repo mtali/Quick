@@ -23,12 +23,12 @@ import com.colisa.quick.R as AppText
 @Composable
 fun SplashRoute(
     viewModel: SplashViewModel = hiltViewModel(),
-    openAndPopUp: (String, String) -> Unit
+    onSplashFinished: () -> Unit
 ) {
     SplashScreen(
         showError = viewModel.showError,
         onAppStart = {
-            viewModel.onAppStarUp(openAndPopUp)
+            viewModel.onAppStarUp(onSplashFinished)
         }
     )
 }
