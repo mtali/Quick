@@ -25,8 +25,8 @@ fun TasksRoute(
     openAddTask: () -> Unit
 ) {
     TasksScreen(
-        onAddClick = { viewModel.onClickSettings(openSettings) },
-        onClickSettings = { viewModel.onClickAddTask(openAddTask) }
+        onAddClick = { viewModel.onClickSettings(openAddTask) },
+        onClickSettings = { viewModel.onClickAddTask(openSettings) }
     )
 }
 

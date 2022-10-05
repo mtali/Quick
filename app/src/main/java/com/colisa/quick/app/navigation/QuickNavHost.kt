@@ -1,14 +1,18 @@
 package com.colisa.quick.app.navigation
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.colisa.quick.app.ui.QuickAppState
+import com.colisa.quick.features.settings.navigation.SettingsDestination
+import com.colisa.quick.features.settings.navigation.settingsGraph
 import com.colisa.quick.features.spash.navigation.SplashDestination
 import com.colisa.quick.features.spash.navigation.splashGraph
 import com.colisa.quick.features.tasks.navigation.TasksDestination
 import com.colisa.quick.features.tasks.navigation.tasksGraph
 
+@ExperimentalMaterialApi
 @Composable
 fun QuickNavHost(
     modifier: Modifier,
@@ -26,12 +30,16 @@ fun QuickNavHost(
         )
 
         tasksGraph(
-            openSettings = {
-
-            },
+            openSettings = { appState.navigate(SettingsDestination.route) },
             openAddTask = {
 
             }
+        )
+
+        settingsGraph(
+            openLogin = {},
+            openSignUp = {},
+            restartApp = { appState.clearAndNavigate(SplashDestination.route) }
         )
     }
 }

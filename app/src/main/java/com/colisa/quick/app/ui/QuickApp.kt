@@ -18,6 +18,7 @@ import com.colisa.quick.core.common.SnackbarManager
 import com.colisa.quick.core.ui.theme.QuickTheme
 import kotlinx.coroutines.CoroutineScope
 
+@ExperimentalMaterialApi
 @Composable
 fun QuickApp() {
     QuickTheme {

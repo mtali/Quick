@@ -23,3 +23,29 @@ fun BasicButton(modifier: Modifier = Modifier, @StringRes text: Int, action: () 
         Text(text = stringResource(id = text), fontSize = 16.sp)
     }
 }
+
+@Composable
+fun DialogConfirmButton(@StringRes text: Int, action: () -> Unit) {
+    Button(
+        onClick = action,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary
+        )
+    ) {
+        Text(text = stringResource(text))
+    }
+}
+
+@Composable
+fun DialogCancelButton(@StringRes text: Int, action: () -> Unit) {
+    Button(
+        onClick = action,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.onPrimary,
+            contentColor = MaterialTheme.colors.primary
+        )
+    ) {
+        Text(text = stringResource(text))
+    }
+}
