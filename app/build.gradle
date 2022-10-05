@@ -59,6 +59,7 @@ dependencies {
     def material_compose = '1.2.1'
     def material_version = '1.6.1'
     def nav_version = "2.5.2"
+    def hilt_nav_version = "1.0.0"
 
     implementation "androidx.core:core-ktx:$core_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
@@ -69,6 +70,7 @@ dependencies {
     implementation "androidx.compose.material:material:$material_compose"
     // Compose Navigation
     implementation "androidx.navigation:navigation-compose:$nav_version"
+    implementation "androidx.hilt:hilt-navigation-compose:$hilt_nav_version"
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
