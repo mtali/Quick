@@ -8,6 +8,7 @@ import com.colisa.quick.core.common.SnackbarManager
 import com.colisa.quick.core.common.exts.isValidEmail
 import com.colisa.quick.core.data.service.AccountService
 import com.colisa.quick.core.data.service.LogService
+import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.ui.base.QuickViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,7 +18,8 @@ import com.colisa.quick.R.string as AppText
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val logService: LogService,
-    private val accountService: AccountService
+    private val accountService: AccountService,
+    private val storageService: StorageService
 ) : QuickViewModel(logService) {
 
     var uiState by mutableStateOf(LoginUiState())
@@ -66,7 +68,14 @@ class LoginViewModel @Inject constructor(
     private fun updateUserId(oldUserId: String, onLogInSuccess: () -> Unit) {
         viewModelScope.launch(showErrorExceptionHandler) {
             val newUserId = accountService.getUserId()
-            onLogInSuccess()
+            storageService.updateUserId(oldUserId, newUserId) { error ->
+                if (error == null) {
+                    onLogInSuccess()
+                } else {
+                    logService.logNonFatalCrash(error)
+                }
+            }
+
         }
     }
 

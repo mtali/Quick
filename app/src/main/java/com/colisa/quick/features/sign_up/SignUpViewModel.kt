@@ -10,6 +10,7 @@ import com.colisa.quick.core.common.exts.isValidPassword
 import com.colisa.quick.core.common.exts.passwordMatches
 import com.colisa.quick.core.data.service.AccountService
 import com.colisa.quick.core.data.service.LogService
+import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.ui.base.QuickViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.ktx.performance
@@ -21,7 +22,8 @@ import com.colisa.quick.R.string as AppText
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val logService: LogService,
-    private val accountService: AccountService
+    private val accountService: AccountService,
+    private val storageService: StorageService
 ) : QuickViewModel(logService) {
     var uiState by mutableStateOf(SignUpUiState())
         private set
@@ -75,6 +77,12 @@ class SignUpViewModel @Inject constructor(
     private fun updateUserId(oldUserId: String, onSignUpCompleted: () -> Unit) {
         viewModelScope.launch(showErrorExceptionHandler) {
             val newUserId = accountService.getUserId()
+            storageService.updateUserId(oldUserId, newUserId) { error ->
+                if (error == null)
+                    onSignUpCompleted()
+                else
+                    logService.logNonFatalCrash(error)
+            }
             onSignUpCompleted()
         }
     }
