@@ -1,4 +1,4 @@
-package com.colisa.quick
+package com.colisa.quick.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
