@@ -4,8 +4,8 @@ import android.content.res.Resources
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
-import com.colisa.quick.core.common.SnackbarManager
-import com.colisa.quick.core.common.SnackbarMessage.Companion.toMessage
+import com.colisa.quick.core.ui.snackbar.SnackbarManager
+import com.colisa.quick.core.ui.snackbar.SnackbarMessage.Companion.toMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch

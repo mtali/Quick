@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.colisa.quick.app.navigation.QuickNavHost
-import com.colisa.quick.core.common.SnackbarManager
+import com.colisa.quick.core.ui.snackbar.SnackbarManager
 import com.colisa.quick.core.ui.theme.QuickTheme
 import kotlinx.coroutines.CoroutineScope
 

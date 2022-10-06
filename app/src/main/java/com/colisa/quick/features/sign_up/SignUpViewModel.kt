@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.colisa.quick.core.common.SnackbarManager
 import com.colisa.quick.core.common.exts.isValidEmail
 import com.colisa.quick.core.common.exts.isValidPassword
 import com.colisa.quick.core.common.exts.passwordMatches
@@ -12,6 +11,7 @@ import com.colisa.quick.core.data.service.AccountService
 import com.colisa.quick.core.data.service.LogService
 import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.ui.base.QuickViewModel
+import com.colisa.quick.core.ui.snackbar.SnackbarManager
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.ktx.performance
 import dagger.hilt.android.lifecycle.HiltViewModel

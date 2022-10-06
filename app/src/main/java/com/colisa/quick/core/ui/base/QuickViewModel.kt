@@ -1,9 +1,9 @@
 package com.colisa.quick.core.ui.base
 
 import androidx.lifecycle.ViewModel
-import com.colisa.quick.core.common.SnackbarManager
-import com.colisa.quick.core.common.SnackbarMessage.Companion.toSnackbarMessage
 import com.colisa.quick.core.data.service.LogService
+import com.colisa.quick.core.ui.snackbar.SnackbarManager
+import com.colisa.quick.core.ui.snackbar.SnackbarMessage.Companion.toSnackbarMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
 
 open class QuickViewModel(private val logService: LogService) : ViewModel() {

@@ -1,4 +1,4 @@
-package com.colisa.quick.core.common
+package com.colisa.quick.core.ui.snackbar
 
 import android.content.res.Resources
 import androidx.annotation.StringRes

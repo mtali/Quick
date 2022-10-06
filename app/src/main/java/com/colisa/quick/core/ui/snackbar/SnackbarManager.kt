@@ -1,4 +1,4 @@
-package com.colisa.quick.core.common
+package com.colisa.quick.core.ui.snackbar
 
 import androidx.annotation.StringRes
 import kotlinx.coroutines.flow.MutableStateFlow
