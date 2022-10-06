@@ -11,4 +11,17 @@ data class Task(
     val flag: Boolean = false,
     val completed: Boolean = false,
     val userId: String = ""
-)
+) {
+    fun hasDueDate(): Boolean {
+        return dueDate.isNotBlank()
+    }
+
+    fun hasDueTime(): Boolean {
+        return dueTime.isNotBlank()
+    }
+}
+
+
+
+
+
