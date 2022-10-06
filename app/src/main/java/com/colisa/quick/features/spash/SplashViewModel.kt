@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.colisa.quick.core.data.service.AccountService
+import com.colisa.quick.core.data.service.ConfigurationService
 import com.colisa.quick.core.data.service.LogService
 import com.colisa.quick.core.ui.base.QuickViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +18,13 @@ internal const val SPLASH_TIMEOUT = 1000L
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val accountService: AccountService,
-    private val logService: LogService
+    private val logService: LogService,
+    configurationService: ConfigurationService
 ) : QuickViewModel(logService) {
+
+    init {
+        configurationService.fetchConfiguration()
+    }
 
     var showError by mutableStateOf(false)
         private set
