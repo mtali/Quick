@@ -37,7 +37,8 @@ fun QuickNavHost(
 
         tasksGraph(
             openSettings = { appState.navigate(SettingsDestination.route) },
-            openAddTask = { appState.navigate(EditTaskDestination.createNavRoute()) }
+            openAddTask = { appState.navigate(EditTaskDestination.createNavRoute()) },
+            openEditTask = { appState.navigate(EditTaskDestination.createNavRoute(it)) }
         )
 
         settingsGraph(

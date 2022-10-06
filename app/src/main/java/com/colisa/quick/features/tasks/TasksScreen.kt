@@ -25,7 +25,8 @@ import com.colisa.quick.R.string as AppText
 fun TasksRoute(
     viewModel: TasksViewModel = hiltViewModel(),
     openSettings: () -> Unit,
-    openAddTask: () -> Unit
+    openAddTask: () -> Unit,
+    openEditTask: (String) -> Unit
 ) {
     DisposableEffect(viewModel) {
         viewModel.addListener()
@@ -34,12 +35,17 @@ fun TasksRoute(
     }
 
     val tasks = viewModel.tasks.values.toList()
+    val options = viewModel.options.value
 
     TasksScreen(
         tasks = tasks,
+        options = options,
         onAddClick = { viewModel.onClickSettings(openAddTask) },
         onClickSettings = { viewModel.onClickAddTask(openSettings) },
-        onTaskCheckedChanged = viewModel::onTaskCheckedChanged
+        onTaskCheckedChanged = { viewModel.onTaskCheckedChanged(it) },
+        onClickTaskAction = { task, action ->
+            viewModel.onClickTaskAction(task, action, openEditTask)
+        }
     )
 }
 
@@ -48,9 +54,11 @@ fun TasksRoute(
 @Composable
 fun TasksScreen(
     tasks: List<Task>,
+    options: List<String>,
     onAddClick: () -> Unit,
     onClickSettings: () -> Unit,
-    onTaskCheckedChanged: (Task) -> Unit
+    onTaskCheckedChanged: (Task) -> Unit,
+    onClickTaskAction: (Task, String) -> Unit
 ) {
     Scaffold(
         floatingActionButton = {
@@ -86,9 +94,9 @@ fun TasksScreen(
             items(tasks, key = { it.id }) { task ->
                 TaskItem(
                     task = task,
-                    options = emptyList(),
+                    options = options,
                     onCheckChange = { onTaskCheckedChanged(task) },
-                    onClickAction = {}
+                    onClickAction = { action -> onClickTaskAction(task, action) }
                 )
             }
         }

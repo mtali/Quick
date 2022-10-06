@@ -11,8 +11,16 @@ object TasksDestination : QuickDestination {
 }
 
 @ExperimentalMaterialApi
-fun NavGraphBuilder.tasksGraph(openSettings: () -> Unit, openAddTask: () -> Unit) {
+fun NavGraphBuilder.tasksGraph(
+    openSettings: () -> Unit,
+    openAddTask: () -> Unit,
+    openEditTask: (String) -> Unit
+) {
     composable(TasksDestination.route) {
-        TasksRoute(openSettings = openSettings, openAddTask = openAddTask)
+        TasksRoute(
+            openSettings = openSettings,
+            openAddTask = openAddTask,
+            openEditTask = openEditTask
+        )
     }
 }

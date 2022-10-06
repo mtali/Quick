@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.colisa.quick.core.data.models.Task
 import com.colisa.quick.core.data.service.AccountService
+import com.colisa.quick.core.data.service.ConfigurationService
 import com.colisa.quick.core.data.service.LogService
 import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.ui.base.QuickViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 class TasksViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
-    private val accountService: AccountService
+    private val accountService: AccountService,
+    private val configurationService: ConfigurationService
 ) : QuickViewModel(logService) {
 
     var tasks = mutableStateMapOf<String, Task>()
@@ -35,6 +37,11 @@ class TasksViewModel @Inject constructor(
         viewModelScope.launch(showErrorExceptionHandler) { storageService.removeListener() }
     }
 
+    fun loadTaskOptions() {
+        val hasEditOption = configurationService.getShowTaskEditButtonConfig()
+        options.value = TaskActionOption.getOptions(hasEditOption)
+    }
+
     fun onTaskCheckedChanged(task: Task) {
         viewModelScope.launch(showErrorExceptionHandler) {
             val updatedTask = task.copy(completed = !task.completed)
@@ -48,8 +55,12 @@ class TasksViewModel @Inject constructor(
 
     fun onClickSettings(openAddTask: () -> Unit) = openAddTask()
 
-    fun onClickTaskAction(task: Task, action: String, onTaskActionCompleted: () -> Unit) {
-
+    fun onClickTaskAction(task: Task, action: String, openEditTask: (String) -> Unit) {
+        when (TaskActionOption.getByTitle(action)) {
+            TaskActionOption.EditTask -> openEditTask(task.id)
+            TaskActionOption.ToggleFlag -> onClickTaskFlag(task)
+            TaskActionOption.DeleteTask -> onClickDeleteTask(task)
+        }
     }
 
     private fun onClickTaskFlag(task: Task) {
@@ -73,7 +84,5 @@ class TasksViewModel @Inject constructor(
         if (wasDocumentDeleted) tasks.remove(task.id) else tasks[task.id] = task
     }
 
-    fun loadTaskOptions() {
 
-    }
 }
