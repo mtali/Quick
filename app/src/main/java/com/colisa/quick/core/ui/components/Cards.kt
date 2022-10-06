@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.colisa.quick.core.common.exts.dropdownSelector
 
 
 @Composable
@@ -90,5 +91,25 @@ private fun CardEditor(
                 tint = highlightColor
             )
         }
+    }
+}
+
+@Composable
+@ExperimentalMaterialApi
+fun CardSelector(
+    @StringRes label: Int,
+    options: List<String>,
+    selection: String,
+    modifier: Modifier,
+    onNewValue: (String) -> Unit
+) {
+    Card(backgroundColor = MaterialTheme.colors.onPrimary, modifier = modifier) {
+        DropdownSelector(
+            modifier = Modifier.dropdownSelector(),
+            label = label,
+            options = options,
+            selection = selection,
+            onNewValue = onNewValue
+        )
     }
 }

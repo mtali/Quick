@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.colisa.quick.app.ui.QuickAppState
+import com.colisa.quick.features.edit_task.navigation.EditTaskDestination
+import com.colisa.quick.features.edit_task.navigation.editTaskGraph
 import com.colisa.quick.features.login.navigation.LoginDestination
 import com.colisa.quick.features.login.navigation.loginGraph
 import com.colisa.quick.features.settings.navigation.SettingsDestination
@@ -35,9 +37,7 @@ fun QuickNavHost(
 
         tasksGraph(
             openSettings = { appState.navigate(SettingsDestination.route) },
-            openAddTask = {
-
-            }
+            openAddTask = { appState.navigate(EditTaskDestination.createNavRoute()) }
         )
 
         settingsGraph(
@@ -56,6 +56,10 @@ fun QuickNavHost(
             onLoginCompleted = {
                 appState.navigateAndPopUp(SettingsDestination.route, LoginDestination.route)
             }
+        )
+
+        editTaskGraph(
+            onEditTaskCompleted = { appState.popUp() }
         )
     }
 }

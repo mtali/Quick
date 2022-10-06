@@ -28,3 +28,4 @@ fun Modifier.basicButton() = this
     .fillMaxWidth()
     .padding(16.dp, 8.dp)
 
+fun Modifier.dropdownSelector() = this.fillMaxWidth()
