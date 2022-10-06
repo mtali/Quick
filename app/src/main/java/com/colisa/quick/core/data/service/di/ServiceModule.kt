@@ -1,9 +1,11 @@
 package com.colisa.quick.core.data.service.di
 
 import com.colisa.quick.core.data.service.AccountService
+import com.colisa.quick.core.data.service.ConfigurationService
 import com.colisa.quick.core.data.service.LogService
 import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.data.service.impl.AccountServiceImpl
+import com.colisa.quick.core.data.service.impl.ConfigurationServiceImpl
 import com.colisa.quick.core.data.service.impl.LogServiceImpl
 import com.colisa.quick.core.data.service.impl.StorageServiceImpl
 import dagger.Binds
@@ -22,4 +24,7 @@ abstract class ServiceModule {
 
     @Binds
     abstract fun providesStorageService(impl: StorageServiceImpl): StorageService
+
+    @Binds
+    abstract fun providesConfigurationService(impl: ConfigurationServiceImpl): ConfigurationService
 }
