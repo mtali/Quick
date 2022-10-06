@@ -50,17 +50,8 @@ class LoginViewModel @Inject constructor(
             val oldUserId = accountService.getUserId()
             accountService.authenticate(email, password) { error ->
                 if (error == null) {
-                    linkWithEmail()
                     updateUserId(oldUserId, onSignInCompleted)
                 } else onError(error)
-            }
-        }
-    }
-
-    private fun linkWithEmail() {
-        viewModelScope.launch(showErrorExceptionHandler) {
-            accountService.linkAccount(email, password) { error ->
-                error?.let { logService.logNonFatalCrash(error) }
             }
         }
     }
