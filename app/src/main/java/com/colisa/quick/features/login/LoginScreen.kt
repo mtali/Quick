@@ -8,14 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.colisa.quick.R
 import com.colisa.quick.core.common.exts.basicButton
 import com.colisa.quick.core.common.exts.fieldModifier
 import com.colisa.quick.core.common.exts.spacer
-import com.colisa.quick.core.ui.components.BasicButton
+import com.colisa.quick.core.ui.components.BasicButtonWithLoading
 import com.colisa.quick.core.ui.components.EmailField
 import com.colisa.quick.core.ui.components.PasswordField
 import com.colisa.quick.core.ui.components.QuickAppBar
+import com.colisa.quick.R.string as AppText
+
 
 @Composable
 fun LoginRoute(viewModel: LoginViewModel = hiltViewModel(), onSignInCompleted: () -> Unit) {
@@ -37,7 +38,7 @@ private fun LoginScreen(
 ) {
     Scaffold(
         topBar = {
-            QuickAppBar(title = R.string.sign_in)
+            QuickAppBar(title = AppText.sign_in)
         }
     ) { padding ->
         Column(
@@ -59,10 +60,11 @@ private fun LoginScreen(
                 modifier = fieldModifier
             )
 
-            BasicButton(
-                text = R.string.sign_in,
+            BasicButtonWithLoading(
+                text = AppText.sign_in,
                 modifier = Modifier.basicButton(),
-                action = onClickSignIn
+                action = onClickSignIn,
+                busy = uiState.busy
             )
         }
 

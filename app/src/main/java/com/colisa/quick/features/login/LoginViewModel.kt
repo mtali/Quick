@@ -46,6 +46,8 @@ class LoginViewModel @Inject constructor(
             return
         }
 
+        updateBusyState(busy = true)
+
         viewModelScope.launch(showErrorExceptionHandler) {
             val oldUserId = accountService.getUserId()
             accountService.authenticate(email, password) { error ->
@@ -61,18 +63,29 @@ class LoginViewModel @Inject constructor(
             val newUserId = accountService.getUserId()
             storageService.updateUserId(oldUserId, newUserId) { error ->
                 if (error == null) {
+                    updateBusyState(false)
                     onLogInSuccess()
                 } else {
                     logService.logNonFatalCrash(error)
                 }
             }
-
         }
+    }
+
+    private fun updateBusyState(busy: Boolean) {
+        uiState = uiState.copy(busy = busy)
+    }
+
+
+    override fun onError(error: Throwable) {
+        super.onError(error)
+        updateBusyState(false)
     }
 
 }
 
 data class LoginUiState(
     val email: String = "",
-    val password: String = ""
+    val password: String = "",
+    val busy: Boolean = false
 )
