@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import com.colisa.quick.R.string as AppText
 
 @Composable
 fun BasicButton(modifier: Modifier = Modifier, @StringRes text: Int, action: () -> Unit) {
@@ -21,6 +22,31 @@ fun BasicButton(modifier: Modifier = Modifier, @StringRes text: Int, action: () 
         )
     ) {
         Text(text = stringResource(id = text), fontSize = 16.sp)
+    }
+}
+
+@Composable
+fun BasicButtonWithLoading(
+    modifier: Modifier = Modifier,
+    text: Int,
+    busy: Boolean = false,
+    action: () -> Unit
+) {
+    Button(
+        onClick = {
+            if (!busy) action()
+        },
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary
+        )
+    ) {
+        if (busy) {
+            Text(text = stringResource(id = AppText.loading))
+        } else {
+            Text(text = stringResource(id = text))
+        }
     }
 }
 
