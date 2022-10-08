@@ -3,23 +3,20 @@ package com.colisa.quick.features.login
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewModelScope
 import com.colisa.quick.core.common.exts.isValidEmail
 import com.colisa.quick.core.data.service.AccountService
 import com.colisa.quick.core.data.service.LogService
-import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.ui.base.QuickViewModel
 import com.colisa.quick.core.ui.snackbar.SnackbarManager
+import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.colisa.quick.R.string as AppText
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val logService: LogService,
-    private val accountService: AccountService,
-    private val storageService: StorageService
+    logService: LogService,
+    private val accountService: AccountService
 ) : QuickViewModel(logService) {
 
     var uiState by mutableStateOf(LoginUiState())
@@ -48,39 +45,22 @@ class LoginViewModel @Inject constructor(
 
         updateBusyState(busy = true)
 
-        viewModelScope.launch(showErrorExceptionHandler) {
-            val oldUserId = accountService.getUserId()
-            accountService.authenticate(email, password) { error ->
-                if (error == null) {
-                    updateUserId(oldUserId, onSignInCompleted)
-                } else onError(error)
+        launchCatching {
+            try {
+                accountService.authenticate(email, password)
+            } catch (exc: FirebaseAuthException) {
+                updateBusyState(false)
+                throw exc
             }
+            onSignInCompleted()
         }
     }
 
-    private fun updateUserId(oldUserId: String, onLogInSuccess: () -> Unit) {
-        viewModelScope.launch(showErrorExceptionHandler) {
-            val newUserId = accountService.getUserId()
-            storageService.updateUserId(oldUserId, newUserId) { error ->
-                if (error == null) {
-                    updateBusyState(false)
-                    onLogInSuccess()
-                } else {
-                    logService.logNonFatalCrash(error)
-                }
-            }
-        }
-    }
 
     private fun updateBusyState(busy: Boolean) {
         uiState = uiState.copy(busy = busy)
     }
 
-
-    override fun onError(error: Throwable) {
-        super.onError(error)
-        updateBusyState(false)
-    }
 
 }
 

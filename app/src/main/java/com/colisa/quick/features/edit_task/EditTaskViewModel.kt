@@ -4,17 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.colisa.quick.core.data.models.Task
-import com.colisa.quick.core.data.service.AccountService
 import com.colisa.quick.core.data.service.LogService
 import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.ui.base.QuickViewModel
 import com.colisa.quick.features.edit_task.navigation.EditTaskDestination
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.perf.ktx.performance
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -23,7 +18,6 @@ import javax.inject.Inject
 class EditTaskViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
-    private val accountService: AccountService,
     savedStateHandle: SavedStateHandle
 ) : QuickViewModel(logService) {
 
@@ -33,11 +27,9 @@ class EditTaskViewModel @Inject constructor(
         private set
 
     fun initialize() {
-        taskId?.let { id ->
-            viewModelScope.launch(showErrorExceptionHandler) {
-                storageService.getTask(id, ::onError) {
-                    task = it
-                }
+        launchCatching {
+            taskId?.let { id ->
+                task = storageService.getTask(id) ?: Task()
             }
         }
     }
@@ -80,41 +72,16 @@ class EditTaskViewModel @Inject constructor(
     }
 
     fun onClickDone(editTaskComplete: () -> Unit) {
-        viewModelScope.launch(showErrorExceptionHandler) {
-            val editedTask = task.copy(userId = accountService.getUserId())
-            if (editedTask.id.isBlank()) {
-                saveTask(editedTask, editTaskComplete)
-            } else {
-                updateTask(editedTask, editTaskComplete)
-            }
-        }
-    }
-
-    private fun updateTask(editedTask: Task, editTaskComplete: () -> Unit) {
-        val updateTaskTrace = Firebase.performance.newTrace(UPDATE_TASK_TRACE)
-        updateTaskTrace.start()
-        storageService.updateTask(editedTask) { error ->
-            updateTaskTrace.stop()
-            if (error == null) editTaskComplete()
-            else onError(error)
-        }
-    }
-
-    private fun saveTask(editedTask: Task, editTaskComplete: () -> Unit) {
-        val saveTaskTrace = Firebase.performance.newTrace(SAVE_TASK_TRACE)
-        saveTaskTrace.start()
-        storageService.saveTask(editedTask) { error ->
-            saveTaskTrace.stop()
-            if (error == null) editTaskComplete()
-            else onError(error)
+        launchCatching {
+            if (task.id.isBlank()) storageService.saveTask(task)
+            else storageService.updateTask(task)
+            editTaskComplete()
         }
     }
 
     companion object {
         private const val UTC = "UTC"
         private const val DATE_FORMAT = "EEE, d MMM yyyy"
-        private const val SAVE_TASK_TRACE = "saveTask"
-        private const val UPDATE_TASK_TRACE = "updateTask"
     }
 
 }

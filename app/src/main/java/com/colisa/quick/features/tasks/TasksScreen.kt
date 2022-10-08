@@ -9,10 +9,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.colisa.quick.core.common.exts.spacer
 import com.colisa.quick.core.common.exts.toolbarActions
 import com.colisa.quick.core.data.models.Task
@@ -20,6 +23,7 @@ import com.colisa.quick.core.ui.components.QuickAppBar
 import com.colisa.quick.R.drawable as AppIcon
 import com.colisa.quick.R.string as AppText
 
+@ExperimentalLifecycleComposeApi
 @ExperimentalMaterialApi
 @Composable
 fun TasksRoute(
@@ -28,13 +32,11 @@ fun TasksRoute(
     openAddTask: () -> Unit,
     openEditTask: (String) -> Unit
 ) {
-    DisposableEffect(viewModel) {
-        viewModel.addListener()
+    LaunchedEffect(viewModel) {
         viewModel.loadTaskOptions()
-        onDispose { viewModel.removeListener() }
     }
 
-    val tasks = viewModel.tasks.values.toList()
+    val tasks by viewModel.tasks.collectAsStateWithLifecycle(emptyList())
     val options = viewModel.options.value
 
     TasksScreen(

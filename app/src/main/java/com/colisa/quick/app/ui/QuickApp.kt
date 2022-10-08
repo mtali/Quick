@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.colisa.quick.app.navigation.QuickNavHost
@@ -19,6 +20,7 @@ import com.colisa.quick.core.ui.theme.QuickTheme
 import kotlinx.coroutines.CoroutineScope
 
 @ExperimentalMaterialApi
+@ExperimentalLifecycleComposeApi
 @Composable
 fun QuickApp() {
     QuickTheme {

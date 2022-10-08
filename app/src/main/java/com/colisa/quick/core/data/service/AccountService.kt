@@ -1,14 +1,20 @@
 package com.colisa.quick.core.data.service
 
+import com.colisa.quick.core.data.models.User
+import kotlinx.coroutines.flow.Flow
+
 interface AccountService {
-    fun hasUser(): Boolean
-    fun isAnonymousUser(): Boolean
-    fun getUserId(): String
-    fun authenticate(email: String, password: String, onResult: (Throwable?) -> Unit)
-    fun createAccount(email: String, password: String, onResult: (Throwable?) -> Unit)
-    fun sendRecoveryEmail(email: String, onResult: (Throwable?) -> Unit)
-    fun createAnonymousAccount(onResult: (Throwable?) -> Unit)
-    fun linkAccount(email: String, password: String, onResult: (Throwable?) -> Unit)
-    fun deleteAccount(onResult: (Throwable?) -> Unit)
-    fun signOut()
+
+    val currentUserId: String
+    val hasUser: Boolean
+
+    val currentUser: Flow<User>
+
+    suspend fun authenticate(email: String, password: String)
+    suspend fun sendRecoveryEmail(email: String)
+    suspend fun createAnonymousAccount()
+    suspend fun linkAccount(email: String, password: String)
+    suspend fun deleteAccount()
+    suspend fun signOut()
+
 }

@@ -3,6 +3,7 @@ package com.colisa.quick.app.navigation
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.compose.NavHost
 import com.colisa.quick.app.ui.QuickAppState
 import com.colisa.quick.features.edit_task.navigation.EditTaskDestination
@@ -19,6 +20,7 @@ import com.colisa.quick.features.tasks.navigation.TasksDestination
 import com.colisa.quick.features.tasks.navigation.tasksGraph
 
 @ExperimentalMaterialApi
+@ExperimentalLifecycleComposeApi
 @Composable
 fun QuickNavHost(
     modifier: Modifier,

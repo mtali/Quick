@@ -1,58 +1,67 @@
 package com.colisa.quick.core.data.service.impl
 
+import com.colisa.quick.core.data.models.User
 import com.colisa.quick.core.data.service.AccountService
+import com.colisa.quick.core.data.service.utils.trace
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AccountServiceImpl @Inject constructor() : AccountService {
+class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : AccountService {
 
-    override fun hasUser(): Boolean {
-        return Firebase.auth.currentUser != null
+    override val currentUserId: String
+        get() = auth.currentUser?.uid.orEmpty()
+
+    override val hasUser: Boolean
+        get() = auth.currentUser != null
+
+    override val currentUser: Flow<User>
+        get() = callbackFlow {
+            val listener = FirebaseAuth.AuthStateListener { auth ->
+                trySend(auth.currentUser?.let { User(it.uid, it.isAnonymous) } ?: User())
+            }
+            auth.addAuthStateListener(listener)
+            awaitClose { auth.removeAuthStateListener(listener) }
+        }
+
+    override suspend fun authenticate(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password).await()
     }
 
-    override fun isAnonymousUser(): Boolean {
-        return Firebase.auth.currentUser?.isAnonymous ?: true
+    override suspend fun sendRecoveryEmail(email: String) {
+        auth.sendPasswordResetEmail(email).await()
     }
 
-    override fun getUserId(): String {
-        return Firebase.auth.currentUser?.uid.orEmpty()
+    override suspend fun createAnonymousAccount() {
+        auth.signInAnonymously().await()
     }
 
-    override fun authenticate(email: String, password: String, onResult: (Throwable?) -> Unit) {
-        Firebase.auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { onResult(it.exception) }
+    override suspend fun linkAccount(email: String, password: String): Unit =
+        trace(LINK_ACCOUNT_TRACE) {
+            val credentials = EmailAuthProvider.getCredential(email, password)
+            auth.currentUser!!.linkWithCredential(credentials).await()
+        }
+
+    override suspend fun deleteAccount() {
+        auth.currentUser!!.delete().await()
     }
 
-    override fun createAccount(email: String, password: String, onResult: (Throwable?) -> Unit) {
-        Firebase.auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { onResult(it.exception) }
+    override suspend fun signOut() {
+        if (auth.currentUser!!.isAnonymous) {
+            auth.currentUser!!.delete()
+        }
+        auth.signOut()
+        createAnonymousAccount()
+
     }
 
-    override fun sendRecoveryEmail(email: String, onResult: (Throwable?) -> Unit) {
-        Firebase.auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { onResult(it.exception) }
+    companion object {
+        private const val LINK_ACCOUNT_TRACE = "linkAccount"
     }
 
-    override fun createAnonymousAccount(onResult: (Throwable?) -> Unit) {
-        Firebase.auth.signInAnonymously()
-            .addOnCompleteListener { onResult(it.exception) }
-    }
-
-    override fun linkAccount(email: String, password: String, onResult: (Throwable?) -> Unit) {
-        val credentials = EmailAuthProvider.getCredential(email, password)
-        Firebase.auth.currentUser!!.linkWithCredential(credentials)
-            .addOnCompleteListener { onResult(it.exception) }
-    }
-
-    override fun deleteAccount(onResult: (Throwable?) -> Unit) {
-        Firebase.auth.currentUser!!.delete()
-            .addOnCompleteListener { onResult(it.exception) }
-    }
-
-    override fun signOut() {
-        Firebase.auth.signOut()
-    }
 
 }

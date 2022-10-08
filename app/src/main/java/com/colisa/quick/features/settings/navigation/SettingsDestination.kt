@@ -1,6 +1,7 @@
 package com.colisa.quick.features.settings.navigation
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.colisa.quick.core.ui.navigation.QuickDestination
@@ -11,6 +12,7 @@ object SettingsDestination : QuickDestination {
 }
 
 @ExperimentalMaterialApi
+@ExperimentalLifecycleComposeApi
 fun NavGraphBuilder.settingsGraph(
     openLogin: () -> Unit,
     openSignUp: () -> Unit,

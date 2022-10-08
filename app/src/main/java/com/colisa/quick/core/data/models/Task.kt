@@ -1,7 +1,9 @@
 package com.colisa.quick.core.data.models
 
+import com.google.firebase.firestore.DocumentId
+
 data class Task(
-    val id: String = "",
+    @DocumentId val id: String = "",
     val title: String = "",
     val priority: String = "",
     val dueDate: String = "",
@@ -10,7 +12,6 @@ data class Task(
     val url: String = "",
     val flag: Boolean = false,
     val completed: Boolean = false,
-    val userId: String = ""
 ) {
     fun hasDueDate(): Boolean {
         return dueDate.isNotBlank()

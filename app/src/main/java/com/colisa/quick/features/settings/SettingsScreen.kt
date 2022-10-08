@@ -13,14 +13,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.colisa.quick.core.common.exts.card
 import com.colisa.quick.core.common.exts.spacer
 import com.colisa.quick.core.ui.components.*
 import com.colisa.quick.R.drawable as AppIcon
 import com.colisa.quick.R.string as AppText
 
+
 @Composable
 @ExperimentalMaterialApi
+@ExperimentalLifecycleComposeApi
 fun SettingsRoute(
     viewModel: SettingsViewModel = hiltViewModel(),
     openLogin: () -> Unit,
@@ -28,8 +32,7 @@ fun SettingsRoute(
     restartApp: () -> Unit
 ) {
 
-    val uiState = viewModel.uiState
-    LaunchedEffect(Unit) { viewModel.initialize() }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle(initialValue = SettingsUiState())
 
     SettingsScreen(
         uiState = uiState,

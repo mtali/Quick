@@ -1,54 +1,32 @@
 package com.colisa.quick.features.tasks
 
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.viewModelScope
 import com.colisa.quick.core.data.models.Task
-import com.colisa.quick.core.data.service.AccountService
 import com.colisa.quick.core.data.service.ConfigurationService
 import com.colisa.quick.core.data.service.LogService
 import com.colisa.quick.core.data.service.StorageService
 import com.colisa.quick.core.ui.base.QuickViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
-    private val accountService: AccountService,
     private val configurationService: ConfigurationService
 ) : QuickViewModel(logService) {
 
-    var tasks = mutableStateMapOf<String, Task>()
-        private set
+    val options = mutableStateOf<List<String>>(listOf())
 
-    var options = mutableStateOf<List<String>>(listOf())
-        private set
-
-    fun addListener() {
-        viewModelScope.launch(showErrorExceptionHandler) {
-            storageService.addListener(accountService.getUserId(), ::onDocumentEvent, ::onError)
-        }
-    }
-
-    fun removeListener() {
-        viewModelScope.launch(showErrorExceptionHandler) { storageService.removeListener() }
-    }
+    val tasks = storageService.tasks
 
     fun loadTaskOptions() {
-        val hasEditOption = configurationService.getShowTaskEditButtonConfig()
+        val hasEditOption = configurationService.isShowTaskEditButtonConfig
         options.value = TaskActionOption.getOptions(hasEditOption)
     }
 
     fun onTaskCheckedChanged(task: Task) {
-        viewModelScope.launch(showErrorExceptionHandler) {
-            val updatedTask = task.copy(completed = !task.completed)
-            storageService.updateTask(updatedTask) { error ->
-                if (error != null) onError(error)
-            }
-        }
+        launchCatching { storageService.updateTask(task.copy(completed = !task.completed)) }
     }
 
     fun onClickAddTask(openSettings: () -> Unit) = openSettings()
@@ -64,25 +42,11 @@ class TasksViewModel @Inject constructor(
     }
 
     private fun onClickTaskFlag(task: Task) {
-        viewModelScope.launch(showErrorExceptionHandler) {
-            val updatedTask = task.copy(flag = !task.flag)
-            storageService.updateTask(updatedTask) { error ->
-                if (error != null) onError(error)
-            }
-        }
+        launchCatching { storageService.updateTask(task.copy(flag = !task.flag)) }
     }
 
     private fun onClickDeleteTask(task: Task) {
-        viewModelScope.launch(showErrorExceptionHandler) {
-            storageService.deleteTask(task.id) { error ->
-                if (error != null) onError(error)
-            }
-        }
+        launchCatching { storageService.deleteTask(task.id) }
     }
-
-    private fun onDocumentEvent(wasDocumentDeleted: Boolean, task: Task) {
-        if (wasDocumentDeleted) tasks.remove(task.id) else tasks[task.id] = task
-    }
-
 
 }
